@@ -1,0 +1,7 @@
+.idea/
+venv/
+__pycache__/
+task_models/__pycache__/
+common/__pycache__/
+.env
+log.txt
