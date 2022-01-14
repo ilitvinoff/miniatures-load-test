@@ -1,6 +1,7 @@
 import logging
 from copy import deepcopy
 
+import gevent
 from locust import HttpUser, task
 
 from common.generators import email_generator, password_generator
@@ -75,4 +76,20 @@ class CatalogueUser(HttpUser):
         self.access_token = json_response_dict['access']
 
     def on_stop(self):
-        self.client.delete(f"{BASE_URL}delete-account/", headers={"Authorization": "Bearer  " + self.access_token})
+        while self.tasks:
+            task=self.tasks.pop()
+            task(self)
+            print(len(self.tasks))
+            gevent.sleep(1)
+
+        response = self.client.delete(f"{BASE_URL}delete-account/",
+                                      headers={"Authorization": "Bearer  " + self.access_token})
+
+        while (response and response.status_code != 204):
+            response_data = response.json()
+            logger.error(f"ERROR: delete_user. Status Code: {response.status_code}. {response_data['detail']}")
+
+            if response.status_code == 401:
+                self.update_access_token()
+            response = self.client.delete(f"{BASE_URL}delete-account/",
+                                          headers={"Authorization": "Bearer  " + self.access_token})

@@ -3,16 +3,16 @@ import logging
 
 import invokust
 
-from setting import BASE_URL
+from setting import BASE_URL, NUM_USERS, SPAWN_RATE, RUN_TIME
 from task_models.catalogue_tests import CatalogueUser
 
 logger = logging.getLogger(__name__)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Start load testing')
-    parser.add_argument('--num_users', default=50, type=int, help='Number of users to create')
-    parser.add_argument('--spawn_rate', default=10, type=int, help='spawn rate')
-    parser.add_argument('--run_time', default='5m', type=str,
+    parser.add_argument('--num_users', default=NUM_USERS, type=int, help='Number of users to create')
+    parser.add_argument('--spawn_rate', default=SPAWN_RATE, type=int, help='spawn rate')
+    parser.add_argument('--run_time', default=RUN_TIME, type=str,
                         help='Run time limit. Set as str value, e.g. 30s, 10m, 24h, etc')
     args = parser.parse_args()
 

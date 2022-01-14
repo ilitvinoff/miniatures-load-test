@@ -1,4 +1,3 @@
-import io
 from tempfile import NamedTemporaryFile
 
 from PIL import Image
